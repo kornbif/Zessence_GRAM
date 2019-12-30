@@ -13,27 +13,41 @@ const typeDefs = gql`
     name: String!
     description: String
     photo: String!
-    services: [Service]!
+    services: [Service]! #list of services
   }
 
   type Service {
     id: ID!
     name: String!
+    price: Float!
+    duration: Int!
     description: String
     photo: String
-    category: Category
+    category: Category #parent: Category type
   }
   # Inputs
   input CategoryInput {
-    name: String!
+    name: String
     description: String
     photo: String
+  }
+
+  input ServiceInput {
+    name: String
+    price: Float
+    duration: Int
+    description: String
+    photo: String
+    categoryId: ID
   }
 
   type Mutation {
     addCategory(categoryInput: CategoryInput): Category
     updateCategory(id: ID!, categoryInput: CategoryInput): Category
     deleteCategory(id: ID!): Category
+    addService(serviceInput: ServiceInput): Service
+    updateService(id: ID!, serviceInput: ServiceInput): Service
+    deleteService(id: ID!): Service
   }
 `;
 
