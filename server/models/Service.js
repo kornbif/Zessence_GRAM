@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
-const ObjectId = Schema.Types.ObjectId;
 
 const serviceSchema = new Schema(
   {
@@ -24,7 +23,10 @@ const serviceSchema = new Schema(
     photo: {
       type: String
     },
-    categoryId: ObjectId
+    categoryId: {
+      type: Schema.Types.ObjectId,
+      ref: "categories"
+    }
   },
   {
     timestamps: true

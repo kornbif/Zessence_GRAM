@@ -1,12 +1,22 @@
 const Category = require("../models/Category");
 const Service = require("../models/Service");
-const Query = require("./queries/query");
-const Mutation = require("./mutations/mutation");
+
+const categoryResolvers = require("./category");
+const serviceResolvers = require("./service");
+const adminResolvers = require("./admin");
 
 module.exports = {
   // Roots
-  Query,
-  Mutation,
+  Query: {
+    ...adminResolvers.Query,
+    ...categoryResolvers.Query,
+    ...serviceResolvers.Query
+  },
+  Mutation: {
+    ...adminResolvers.Mutation,
+    ...categoryResolvers.Mutation,
+    ...serviceResolvers.Mutation
+  },
   //   Relations
   Category: {
     services: (category, _) => {

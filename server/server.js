@@ -1,7 +1,7 @@
 const { ApolloServer } = require("apollo-server");
 const mongoose = require("mongoose");
 const typeDefs = require("./schema");
-const resolvers = require("./resolver");
+const resolvers = require("./resolvers");
 require("dotenv").config();
 
 //MONGODB
@@ -23,7 +23,12 @@ connection.once("open", () => {
   console.log("MongoDB database connection established successfully");
 });
 
-const server = new ApolloServer({ cors: true, typeDefs, resolvers });
+const server = new ApolloServer({
+  cors: true,
+  typeDefs,
+  resolvers,
+  context: ({ req }) => ({ req })
+});
 
 const PORT = process.env.PORT || 4000;
 
