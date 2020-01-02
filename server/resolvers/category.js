@@ -25,11 +25,9 @@ module.exports = {
     }
   },
   Mutation: {
-    addCategory: async (_, { categoryInput }, context) => {
+    createCategory: async (_, { categoryInput }, context) => {
       const admin = checkAuth(context);
       try {
-        console.log(admin);
-
         const newCategory = new Category({
           name: categoryInput.name,
           description: categoryInput.description,

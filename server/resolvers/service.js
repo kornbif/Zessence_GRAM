@@ -1,6 +1,8 @@
 const Service = require("../models/Service");
+const Category = require("../models/Category");
+const Employee = require("../models/Employee");
 const checkAuth = require("../util/check-auth");
-
+const { UserInputError } = require("apollo-server");
 module.exports = {
   Query: {
     services: async () => {
@@ -27,20 +29,40 @@ module.exports = {
     }
   },
   Mutation: {
-    addService: async (_, { serviceInput }, context) => {
-      const admin = checkAuth(context);
-      const newService = new Service({
-        name: serviceInput.name,
-        price: serviceInput.price,
-        duration: serviceInput.duration,
-        description: serviceInput.description,
-        photo: serviceInput.photo,
-        categoryId: serviceInput.categoryId
-      });
+    createService: async (_, { serviceInput }, context) => {
+      try {
+        const admin = checkAuth(context);
+        const newService = new Service({
+          name: serviceInput.name,
+          price: serviceInput.price,
+          duration: serviceInput.duration,
+          description: serviceInput.description,
+          photo: serviceInput.photo,
+          category: serviceInput.category
+        });
 
-      const savedService = await newService.save();
+        const category = await Category.findById(serviceInput.category);
+        const serviceExist = await Service.findOne({ name: serviceInput.name });
 
-      return savedService;
+        if (!category) {
+          throw new Error("Category not exist");
+        }
+
+        if (!serviceExist) {
+          const savedService = await newService.save();
+
+          let createdService = { ...savedService._doc };
+          category.services.push(newService);
+          await category.save();
+          return createdService;
+        } else {
+          throw new UserInputError("Service already exist", {
+            error: "Service exist already"
+          });
+        }
+      } catch (err) {
+        throw err;
+      }
     },
 
     updateService: async (_, { id, serviceInput }, context) => {
@@ -62,8 +84,8 @@ module.exports = {
         if (serviceInput.photo) {
           updateService.photo = serviceInput.photo;
         }
-        if (serviceInput.categoryId) {
-          updateService.categoryId = serviceInput.categoryId;
+        if (serviceInput.category) {
+          updateService.category = serviceInput.category;
         }
 
         const updated = await Service.findByIdAndUpdate(id);
@@ -77,8 +99,9 @@ module.exports = {
     deleteService: async (_, { id }, context) => {
       const admin = checkAuth(context);
       try {
+        await Employee.updateMany({}, { $pull: { services: id } });
+        await Category.updateMany({}, { $pull: { services: id } });
         const deleted = await Service.findByIdAndDelete(id);
-
         return deleted;
       } catch (err) {
         throw err;

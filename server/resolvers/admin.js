@@ -65,14 +65,16 @@ module.exports = {
         }
       );
 
-      return { id: admin.id, token: token, tokenExpiration: 1 };
+      return { _id: admin.id, token: token, tokenExpiration: 1 };
     },
 
     // CREATE NEW ADMIN
     createAdmin: async (
       _,
-      { adminInput: { empId, firstName, lastName, contact, email, password } }
+      { adminInput: { empId, firstName, lastName, contact, email, password } },
+      context
     ) => {
+      const admin = checkAuth(context);
       try {
         //Validating Inputs
         const { valid, errors } = validateAdminCreateInput(

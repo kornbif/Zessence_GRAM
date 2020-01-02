@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const autopopulate = require("mongoose-autopopulate");
 
 const Schema = mongoose.Schema;
 
@@ -23,6 +24,7 @@ const employeeSchema = new Schema({
     unique: true
   },
   photo: String,
+  role: String,
   schedule: [
     {
       Date: {
@@ -41,7 +43,17 @@ const employeeSchema = new Schema({
       name: String,
       photo: String
     }
+  ],
+  services: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Service",
+      autopopulate: true
+    }
   ]
 });
 
-module.exports = mongoose.model("Employee", employeeSchema);
+module.exports = mongoose.model(
+  "Employee",
+  employeeSchema.plugin(autopopulate)
+);

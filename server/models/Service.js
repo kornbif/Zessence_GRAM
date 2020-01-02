@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const autopopulate = require("mongoose-autopopulate");
 
 const Schema = mongoose.Schema;
 
@@ -23,14 +24,22 @@ const serviceSchema = new Schema(
     photo: {
       type: String
     },
-    categoryId: {
+    category: {
       type: Schema.Types.ObjectId,
-      ref: "categories"
-    }
+      ref: "Category",
+      autopopulate: true
+    },
+    employees: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Employee",
+        autopopulate: true
+      }
+    ]
   },
   {
     timestamps: true
   }
 );
 
-module.exports = mongoose.model("Service", serviceSchema);
+module.exports = mongoose.model("Service", serviceSchema.plugin(autopopulate));
