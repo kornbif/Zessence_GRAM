@@ -1,7 +1,7 @@
 const Service = require("../models/Service");
 const Category = require("../models/Category");
 const Employee = require("../models/Employee");
-const checkAuth = require("../util/check-auth");
+const { authAdmin } = require("../util/check-auth");
 const { UserInputError } = require("apollo-server");
 module.exports = {
   Query: {
@@ -31,7 +31,7 @@ module.exports = {
   Mutation: {
     createService: async (_, { serviceInput }, context) => {
       try {
-        const admin = checkAuth(context);
+        const admin = authAdmin(context);
         const newService = new Service({
           name: serviceInput.name,
           price: serviceInput.price,
@@ -65,27 +65,31 @@ module.exports = {
       }
     },
 
-    updateService: async (_, { id, serviceInput }, context) => {
-      const admin = checkAuth(context);
+    updateService: async (
+      _,
+      { id, name, price, duration, description, photo, category },
+      context
+    ) => {
+      const admin = authAdmin(context);
       try {
         let updateService = {};
-        if (serviceInput.name) {
-          updateService.name = serviceInput.name;
+        if (name) {
+          updateService.name = name;
         }
-        if (serviceInput.price) {
-          updateService.price = serviceInput.price;
+        if (price) {
+          updateService.price = price;
         }
-        if (serviceInput.duration) {
-          updateService.duration = serviceInput.duration;
+        if (duration) {
+          updateService.duration = duration;
         }
-        if (serviceInput.description) {
-          updateService.description = serviceInput.description;
+        if (description) {
+          updateService.description = description;
         }
-        if (serviceInput.photo) {
-          updateService.photo = serviceInput.photo;
+        if (photo) {
+          updateService.photo = photo;
         }
-        if (serviceInput.category) {
-          updateService.category = serviceInput.category;
+        if (category) {
+          updateService.category = category;
         }
 
         const updated = await Service.findByIdAndUpdate(id);
@@ -97,7 +101,7 @@ module.exports = {
     },
 
     deleteService: async (_, { id }, context) => {
-      const admin = checkAuth(context);
+      const admin = authAdmin(context);
       try {
         await Employee.updateMany({}, { $pull: { services: id } });
         await Category.updateMany({}, { $pull: { services: id } });

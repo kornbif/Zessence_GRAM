@@ -1,11 +1,11 @@
-const Category = require("../models/Category");
-const Service = require("../models/Service");
-const Employee = require("../models/Employee");
-
 const categoryResolvers = require("./category");
 const serviceResolvers = require("./service");
 const adminResolvers = require("./admin");
-const employeeResolver = require("./employee");
+const employeeResolvers = require("./employee");
+const userResolvers = require("./user");
+const scheduleResolvers = require("./schedule");
+
+const Employee = require("../models/Employee");
 
 module.exports = {
   // Roots
@@ -13,12 +13,28 @@ module.exports = {
     ...adminResolvers.Query,
     ...categoryResolvers.Query,
     ...serviceResolvers.Query,
-    ...employeeResolver.Query
+    ...employeeResolvers.Query
   },
   Mutation: {
     ...adminResolvers.Mutation,
     ...categoryResolvers.Mutation,
     ...serviceResolvers.Mutation,
-    ...employeeResolver.Mutation
+    ...employeeResolvers.Mutation,
+    ...userResolvers.Mutation
+    // ...scheduleResolvers.Mutation
   }
+  // Schedule: {
+  //   dates: async (schedule, _) => {
+  //     const sched = await Employee.find({ schedule });
+
+  //     return sched;
+  //   }
+  // },
+  // Date: {
+  //   date: async (_, date ) => {
+  //     const fetchDate = await Employee.aggregate();
+
+  //     return fetchDate;
+  //   }
+  // }
 };

@@ -1,5 +1,5 @@
 const Category = require("../models/Category");
-const checkAuth = require("../util/check-auth");
+const { authAdmin } = require("../util/check-auth");
 
 module.exports = {
   Query: {
@@ -26,7 +26,7 @@ module.exports = {
   },
   Mutation: {
     createCategory: async (_, { categoryInput }, context) => {
-      const admin = checkAuth(context);
+      const admin = authAdmin(context);
       try {
         const newCategory = new Category({
           name: categoryInput.name,
@@ -42,19 +42,19 @@ module.exports = {
       }
     },
 
-    updateCategory: async (_, { id, categoryInput, context }) => {
-      const admin = checkAuth(context);
+    updateCategory: async (_, { id, name, description, photo }, context) => {
+      const admin = authAdmin(context);
       try {
         let updateCateg = {};
 
-        if (categoryInput.name) {
-          updateCateg.name = categoryInput.name;
+        if (name) {
+          updateCateg.name = name;
         }
-        if (categoryInput.description) {
-          updateCateg.description = categoryInput.description;
+        if (description) {
+          updateCateg.description = description;
         }
-        if (categoryInput.photo) {
-          updateCateg.photo = categoryInput.photo;
+        if (photo) {
+          updateCateg.photo = photo;
         }
 
         const updated = await Category.findByIdAndUpdate(id, updateCateg, {
@@ -68,7 +68,7 @@ module.exports = {
     },
 
     deleteCategory: async (_, { id }, context) => {
-      const admin = checkAuth(context);
+      const admin = authAdmin(context);
       try {
         const deletedCategory = await Category.findByIdAndDelete(id);
 

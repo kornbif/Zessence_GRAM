@@ -18,6 +18,17 @@ const typeDefs = gql`
     tokenExpiration: Int!
   }
 
+  type User {
+    _id: ID!
+    firstName: String!
+    lastName: String!
+    contact: String
+    email: String!
+    password: String
+    createdAt: String
+    updatedAt: String
+  }
+
   type Category {
     _id: ID!
     name: String!
@@ -37,12 +48,6 @@ const typeDefs = gql`
     employees: [Employee]!
   }
 
-  # type EmployeeService {
-  #   id: ID!
-  #   service: [Service]
-  #   employee: [Employee]
-  # }
-
   type Employee {
     _id: ID!
     empId: String!
@@ -53,18 +58,23 @@ const typeDefs = gql`
     photo: String
     role: Role
     services: [Service]!
-    # credentials: [Credential]!
-    schedule: [Schedule]!
+    certificates: [Certificate!]!
+    schedule: [Date]!
+    createdAt: String
   }
 
-  type Schedule {
+  type Date {
     id: ID!
-    date: String
-    slot: [Time]
+    date: String!
+    start: [String]!
+    break: [String]!
   }
 
-  type Time {
+
+  type Certificate {
     id: ID!
+    name: String!
+    photo: String
   }
 
   enum Role {
@@ -81,9 +91,17 @@ const typeDefs = gql`
     email: String!
     password: String!
   }
+  input UserInput {
+    firstName: String!
+    lastName: String!
+    contact: String
+    email: String!
+    password: String!
+    confirmPassword: String!
+  }
 
   input EmployeeInput {
-    empId: String
+    empId: String!
     firstName: String!
     lastName: String!
     contact: String
@@ -93,7 +111,7 @@ const typeDefs = gql`
   }
 
   input CategoryInput {
-    name: String
+    name: String!
     description: String
     photo: String
   }
@@ -123,22 +141,55 @@ const typeDefs = gql`
     # auth
     adminLogin(empId: String!, password: String!): AuthData
     # Admin
-    createAdmin(adminInput: AdminInput): Admin!
-    # Category
+    createAdmin(adminInput: AdminInput): Admin
+    # User
+    createUser(userInput: UserInput): User
+    userLogin(email: String!, password: String!): AuthData
+    # Employee
+    """
+    Not yet include the deleteEmployee Mutation
+    """
+    createEmployee(empInput: EmployeeInput!): Employee
+    updateEmployee(
+      id: ID!
+      empId: String
+      firstName: String
+      lastName: String
+      contact: String
+      email: String
+      photo: String
+      role: Role
+    ): Employee
+    """
+    Add Services that employee are capable of doing
+    """
+    addService(employeeId: ID!, serviceId: ID!): Employee
+    # SCHEDULE
+    addDate(id: ID!, date: String!): Employee
+
+   
+
+    #  Category
     createCategory(categoryInput: CategoryInput): Category
-    updateCategory(id: ID!, categoryInput: CategoryInput): Category
+    updateCategory(
+      id: ID!
+      name: String
+      description: String
+      photo: String
+    ): Category
     deleteCategory(id: ID!): String!
     # Service
     createService(serviceInput: ServiceInput): Service
-    updateService(id: ID!, serviceInput: ServiceInput): Service
+    updateService(
+      id: ID!
+      name: String
+      price: Float
+      duration: Int
+      description: String
+      photo: String
+      category: ID
+    ): Service
     deleteService(id: ID!): Service
-
-    # Employee
-    createEmployee(empInput: EmployeeInput): Employee
-
-    addService(employeeId: ID!, serviceId: ID!): Employee
-    #EmployeeServiceRelation
-    # createEmployeeService(employeeId: ID!, serviceId: ID!): EmployeeService!
   }
 `;
 
