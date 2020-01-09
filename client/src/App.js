@@ -1,11 +1,22 @@
 import React from "react";
-import "./App.css";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
+import { AuthProvider } from "./context/auth";
+
+import Main from "./pages/Main";
+import Admin from "./pages/Admin";
+import "semantic-ui-css/semantic.min.css";
+import "./App.css";
 function App() {
   return (
-    <div className="App">
-      <h1>Hello World</h1>
-    </div>
+    <AuthProvider>
+      <Router>
+        <Switch>
+          <Route exact path="/" component={Main} />
+          <Route path="/zeadmin" component={Admin} />
+        </Switch>
+      </Router>
+    </AuthProvider>
   );
 }
 

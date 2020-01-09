@@ -11,9 +11,9 @@ module.exports = {
         throw err;
       }
     },
-    category: async (_, { id }) => {
+    category: async (_, { _id }) => {
       try {
-        const getCategory = await Category.findById(id);
+        const getCategory = await Category.findById(_id);
         if (getCategory) {
           return getCategory;
         } else {
@@ -42,7 +42,7 @@ module.exports = {
       }
     },
 
-    updateCategory: async (_, { id, name, description, photo }, context) => {
+    updateCategory: async (_, { _id, name, description, photo }, context) => {
       const admin = authAdmin(context);
       try {
         let updateCateg = {};
@@ -57,7 +57,7 @@ module.exports = {
           updateCateg.photo = photo;
         }
 
-        const updated = await Category.findByIdAndUpdate(id, updateCateg, {
+        const updated = await Category.findByIdAndUpdate(_id, updateCateg, {
           new: true
         });
 
@@ -67,10 +67,10 @@ module.exports = {
       }
     },
 
-    deleteCategory: async (_, { id }, context) => {
+    deleteCategory: async (_, { _id }, context) => {
       const admin = authAdmin(context);
       try {
-        const deletedCategory = await Category.findByIdAndDelete(id);
+        const deletedCategory = await Category.findByIdAndDelete(_id);
 
         return deletedCategory;
       } catch (err) {

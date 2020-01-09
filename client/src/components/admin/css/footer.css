@@ -1,0 +1,5 @@
+.layout-footer {
+  grid-area: footer;
+  height: 10vh;
+  background-color: white;
+}

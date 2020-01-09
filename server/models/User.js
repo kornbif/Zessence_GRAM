@@ -22,7 +22,14 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true
-    }
+    },
+    appointments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Appointment",
+        autopopulate: true
+      }
+    ]
   },
   {
     timestamps: true

@@ -1,13 +1,14 @@
 const Employee = require("../models/Employee");
 const Service = require("../models/Service");
 const { UserInputError } = require("apollo-server");
-const { authAdmin } = require("../util/check-auth");
+const Auth = require("../util/check-auth");
 const { validateEmployeeCreateInput } = require("../util/validators");
 
 module.exports = {
   Query: {
     employees: async () => {
       try {
+        console.log("GEt Employee");
         const getAllEmployee = await Employee.find();
 
         return getAllEmployee;
@@ -15,19 +16,12 @@ module.exports = {
         throw err;
       }
     },
-    employee: async (_, { id }) => {
+
+    employee: async (_, { _id }) => {
       try {
-        const getEmployee = await Employee.findById(id);
+        const getEmployee = await Employee.findById(_id);
 
         return getEmployee;
-      } catch (err) {
-        throw err;
-      }
-    },
-    aestheticians: async (_, { role }) => {
-      try {
-        const aestheticians = await Employee.find({ role });
-        return aestheticians;
       } catch (err) {
         throw err;
       }
@@ -36,10 +30,12 @@ module.exports = {
   Mutation: {
     createEmployee: async (
       _,
-      { empInput: { empId, firstName, lastName, contact, email, photo, role } }
+      { empInput: { empId, firstName, lastName, contact, email, photo, role } },
+      context
     ) => {
-      // const admin = authAdmin(context);
+      const admin = Auth(context);
       try {
+        console.log("Create Employee");
         const { errors, valid } = validateEmployeeCreateInput(
           empId,
           firstName,
@@ -54,10 +50,9 @@ module.exports = {
         const checkEmployee = await Employee.findOne({ empId });
 
         if (checkEmployee) {
+          errors.existEmp = "This employee ID already exist";
           throw new UserInputError("Employee already exist", {
-            errors: {
-              empId: "This employee ID already exist"
-            }
+            errors
           });
         }
 
@@ -80,10 +75,10 @@ module.exports = {
     },
     updateEmployee: async (
       _,
-      { id, empId, firstName, lastName, contact, email, photo, role },
+      { _id, empId, firstName, lastName, contact, email, photo, role },
       context
     ) => {
-      const admin = authAdmin(context);
+      const admin = Auth(context);
       try {
         let updateEmployee = {};
 
@@ -115,7 +110,7 @@ module.exports = {
           updateEmployee.role = role;
         }
 
-        const updated = await Employee.findByIdAndUpdate(id, updateEmployee, {
+        const updated = await Employee.findByIdAndUpdate(_id, updateEmployee, {
           new: true
         });
 
@@ -123,16 +118,8 @@ module.exports = {
       } catch (err) {}
     },
     addService: async (_, { employeeId, serviceId }, context) => {
-      const admin = authAdmin(context);
+      const admin = Auth(context);
       try {
-        const employee = await Employee.findById(employeeId);
-        const service = await Service.findById(serviceId);
-        if (!employee) {
-          throw new Error("Employee does not exist");
-        } else if (!service) {
-          throw new Error("Service not found");
-        }
-
         await Employee.updateOne(
           { _id: employeeId },
           { $addToSet: { services: serviceId } }
@@ -142,26 +129,21 @@ module.exports = {
           { _id: serviceId },
           { $addToSet: { employees: employeeId } }
         );
+
         // employee.services.push(serviceId);
         // service.employees.push(employeeId);
         // await employee.save();
         // await service.save();
-        return employee;
-      } catch (err) {
-        throw err;
-      }
-    },
-    addDate: async (_, { id, date }) => {
-      try {
-        const employee = await Employee.findById(id);
 
-        if (employee) {
-          employee.schedule.push({
-            date: new Date(date).toLocaleDateString()
-          });
-          await employee.save();
-          return employee;
+        const employee = await Employee.findById(employeeId);
+        const service = await Service.findById(serviceId);
+        if (!employee) {
+          throw new Error("Employee does not exist");
+        } else if (!service) {
+          throw new Error("Service not found");
+        } else {
         }
+        return employee;
       } catch (err) {
         throw err;
       }

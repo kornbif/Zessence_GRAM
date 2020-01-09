@@ -11,9 +11,9 @@ const {
 
 module.exports = {
   Query: {
-    admin: async (_, { id }) => {
+    admin: async (_, { _id }) => {
       try {
-        const getAdmin = await Admin.findById(id);
+        const getAdmin = await Admin.findById(_id);
 
         return getAdmin;
       } catch (err) {
@@ -52,13 +52,13 @@ module.exports = {
       const isEqual = await bcrypt.compare(password, admin.password);
 
       if (!isEqual) {
-        errors.general = "Invalid Credentials";
+        errors.isNotEqual = "Invalid Credentials";
         throw new UserInputError("Invalid Credentials", { errors });
       }
 
       //* Token
       const token = await jwt.sign(
-        { id: admin.id, empId: admin.empId },
+        { _id: admin.id, empId: admin.empId },
         process.env.SECRET_KEY,
         {
           expiresIn: "1h"

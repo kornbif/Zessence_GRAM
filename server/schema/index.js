@@ -1,16 +1,6 @@
 const { gql } = require("apollo-server");
 
 const typeDefs = gql`
-  type Admin {
-    _id: ID!
-    empId: String!
-    firstName: String!
-    lastName: String!
-    contact: String
-    email: String!
-    password: String
-  }
-
   # adminAuth
   type AuthData {
     _id: ID!
@@ -27,6 +17,57 @@ const typeDefs = gql`
     password: String
     createdAt: String
     updatedAt: String
+    appointment: [Appointment]!
+  }
+
+  type Appointment {
+    _id: ID!
+    user: User
+    service: Service
+    aesthetician: Employee
+    date: String!
+    time: String!
+    duration: Int
+    message: String
+    status: String
+  }
+
+  type Admin {
+    _id: ID!
+    empId: String!
+    firstName: String!
+    lastName: String!
+    contact: String
+    email: String!
+    password: String
+  }
+
+  type Employee {
+    _id: ID!
+    empId: String!
+    firstName: String!
+    lastName: String!
+    contact: String
+    email: String!
+    photo: String
+    role: String
+    services: [Service]!
+    certificates: [Certificate!]!
+    schedule: [Date]!
+    createdAt: String
+  }
+
+  type Date {
+    id: ID!
+    date: String!
+    start: [String]!
+    break: [String]!
+  }
+
+  type Certificate {
+    id: ID!
+    name: String!
+    photo: String
   }
 
   type Category {
@@ -48,49 +89,13 @@ const typeDefs = gql`
     employees: [Employee]!
   }
 
-  type Employee {
-    _id: ID!
-    empId: String!
-    firstName: String!
-    lastName: String!
-    contact: String
-    email: String!
-    photo: String
-    role: Role
-    services: [Service]!
-    certificates: [Certificate!]!
-    schedule: [Date]!
-    createdAt: String
-  }
-
-  type Date {
-    id: ID!
-    date: String!
-    start: [String]!
-    break: [String]!
-  }
-
-
-  type Certificate {
-    id: ID!
-    name: String!
-    photo: String
-  }
-
-  enum Role {
-    RECEPTIONIST
-    AESTHETICIAN
-  }
+  # enum Role {
+  #   RECEPTIONIST
+  #   AESTHETICIAN
+  # }
 
   # Inputs
-  input AdminInput {
-    empId: String!
-    firstName: String!
-    lastName: String!
-    contact: String
-    email: String!
-    password: String!
-  }
+
   input UserInput {
     firstName: String!
     lastName: String!
@@ -100,6 +105,23 @@ const typeDefs = gql`
     confirmPassword: String!
   }
 
+  input AppointmentInput {
+    serviceId: ID
+    employeeId: ID
+    date: String
+    time: String
+    message: String
+  }
+
+  input AdminInput {
+    empId: String!
+    firstName: String!
+    lastName: String!
+    contact: String
+    email: String!
+    password: String!
+  }
+
   input EmployeeInput {
     empId: String!
     firstName: String!
@@ -107,7 +129,17 @@ const typeDefs = gql`
     contact: String
     email: String!
     photo: String
-    role: Role
+    role: String
+  }
+
+  input TimeInput {
+    startTime: String
+    timeLength: Int
+  }
+
+  input BreakTimeInput {
+    startOfBreak: String
+    breakLength: Int
   }
 
   input CategoryInput {
@@ -126,62 +158,72 @@ const typeDefs = gql`
   }
 
   type Query {
-    admin(id: ID!): Admin!
+    appointments: [Appointment]
+    appointment(_id: ID!): Appointment
+    admin(_id: ID!): Admin!
     admins: [Admin]!
-    category(id: ID!): Category
+    category(_id: ID!): Category
     categories: [Category]
-    service(id: ID!): Service
+    service(_id: ID!): Service
     services: [Service]!
     employees: [Employee]!
-    employee(id: ID!): Employee!
-    aestheticians(role: Role): [Employee]
+    employee(_id: ID!): Employee!
   }
 
   type Mutation {
-    # auth
-    adminLogin(empId: String!, password: String!): AuthData
+    # User
+    register(userInput: UserInput): User
+    userLogin(email: String!, password: String!): AuthData
+
+    #Appointment
+    createAppointment(inputAppointment: AppointmentInput): Appointment
+    cancelAppointment(_id: ID!): Appointment
+
     # Admin
     createAdmin(adminInput: AdminInput): Admin
-    # User
-    createUser(userInput: UserInput): User
-    userLogin(email: String!, password: String!): AuthData
+    adminLogin(empId: String!, password: String!): AuthData
     # Employee
     """
     Not yet include the deleteEmployee Mutation
     """
-    createEmployee(empInput: EmployeeInput!): Employee
+    createEmployee(empInput: EmployeeInput): Employee
     updateEmployee(
-      id: ID!
+      _id: ID!
       empId: String
       firstName: String
       lastName: String
       contact: String
       email: String
       photo: String
-      role: Role
+      role: String
     ): Employee
     """
-    Add Services that employee are capable of doing
+    Add Services to Employee
     """
     addService(employeeId: ID!, serviceId: ID!): Employee
     # SCHEDULE
     addDate(id: ID!, date: String!): Employee
+    addTime(
+      _id: ID!
+      schedId: ID!
+      timeInput: TimeInput
+      breakTimeInput: BreakTimeInput
+    ): Employee
 
-   
-
-    #  Category
+    #Category
     createCategory(categoryInput: CategoryInput): Category
     updateCategory(
-      id: ID!
+      _id: ID!
       name: String
       description: String
       photo: String
     ): Category
-    deleteCategory(id: ID!): String!
-    # Service
+    deleteCategory(_id: ID!): String!
+
+    #Service
     createService(serviceInput: ServiceInput): Service
     updateService(
-      id: ID!
+      _id: ID!
       name: String
       price: Float
       duration: Int
@@ -189,7 +231,7 @@ const typeDefs = gql`
       photo: String
       category: ID
     ): Service
-    deleteService(id: ID!): Service
+    deleteService(_id: ID!): Service
   }
 `;
 

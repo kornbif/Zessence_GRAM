@@ -4,8 +4,7 @@ const adminResolvers = require("./admin");
 const employeeResolvers = require("./employee");
 const userResolvers = require("./user");
 const scheduleResolvers = require("./schedule");
-
-const Employee = require("../models/Employee");
+const appointmentResolvers = require("./appointment");
 
 module.exports = {
   // Roots
@@ -13,28 +12,16 @@ module.exports = {
     ...adminResolvers.Query,
     ...categoryResolvers.Query,
     ...serviceResolvers.Query,
-    ...employeeResolvers.Query
+    ...employeeResolvers.Query,
+    ...appointmentResolvers.Query
   },
   Mutation: {
     ...adminResolvers.Mutation,
     ...categoryResolvers.Mutation,
     ...serviceResolvers.Mutation,
     ...employeeResolvers.Mutation,
-    ...userResolvers.Mutation
-    // ...scheduleResolvers.Mutation
+    ...userResolvers.Mutation,
+    ...scheduleResolvers.Mutation,
+    ...appointmentResolvers.Mutation
   }
-  // Schedule: {
-  //   dates: async (schedule, _) => {
-  //     const sched = await Employee.find({ schedule });
-
-  //     return sched;
-  //   }
-  // },
-  // Date: {
-  //   date: async (_, date ) => {
-  //     const fetchDate = await Employee.aggregate();
-
-  //     return fetchDate;
-  //   }
-  // }
 };

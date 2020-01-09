@@ -12,7 +12,7 @@ const {
 module.exports = {
   Query: {},
   Mutation: {
-    createUser: async (
+    register: async (
       _,
       {
         userInput: {
@@ -86,9 +86,9 @@ module.exports = {
         }
         //* Token
         const token = await jwt.sign(
-          { id: user.id, email: user.email },
+          { _id: user.id, email: user.email },
 
-          process.env.SIKRETONG_SUSI,
+          process.env.SECRET_KEY,
           {
             expiresIn: "1h"
           }

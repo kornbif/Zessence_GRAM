@@ -30,7 +30,7 @@ const server = new ApolloServer({
   context: ({ req }) => ({ req })
 });
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 5000;
 
 server.listen(PORT).then(({ url }) => {
   console.log(`🚀 Server ready at ${url}`);

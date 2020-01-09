@@ -1,0 +1,125 @@
+.container-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+}
+.login-right,
+.login-left {
+  height: 100vh;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(99, 99, 102);
+}
+.login-left {
+  background-image: url("https://images.pexels.com/photos/2590644/pexels-photo-2590644.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.form-container {
+  width: 60%;
+  min-height: 40%;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px 0;
+  box-shadow: 0px 11px 39px -16px rgba(0, 0, 0, 0.75);
+}
+.form {
+  width: 80%;
+  margin: 0 auto;
+}
+
+/* .login-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.login-container__left {
+  width: 100%;
+  height: 100vh;
+  background-image: url("https://images.pexels.com/photos/2590644/pexels-photo-2590644.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.form-container {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(15, 24, 29);
+}
+form {
+  background: white;
+  height: 450px;
+  width: 450px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 10px;
+}
+.form-control {
+  width: 50%;
+  position: relative;
+  height: 40px;
+  margin: 10px 0;
+}
+.form-control input {
+  width: 100%;
+  height: 100%;
+  color: #595f6e;
+  padding-top: 20px;
+  padding-left: 10px;
+  border: none;
+}
+.label-input {
+  position: absolute;
+  bottom: 0px;
+  left: 0%;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+  border-bottom: 1px solid black;
+}
+
+.label-input::after {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 0px;
+  left: 0%;
+  bottom: -1px;
+  border-bottom: 3px solid rgb(107, 191, 224);
+  transition: width 0.4s ease;
+}
+.content-input {
+  position: absolute;
+  bottom: 5px;
+  left: 10px;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.form-control input:focus + .label-input .content-input,
+.form-control input:valid + .label-input .content-input {
+  transform: translateY(-180%);
+  font-size: 12px;
+  color: rgb(107, 191, 224);
+  background-color: white;
+}
+
+.form-control input:focus + .label-input::after,
+.form-control input:valid + .label-input {
+  width: 100%;
+} */

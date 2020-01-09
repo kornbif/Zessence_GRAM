@@ -75,7 +75,7 @@ const validateEmployeeCreateInput = (empId, firstName, lastName, email) => {
   } else {
     const regex = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$/;
     if (!email.match(regex)) {
-      errors.email = "Email must be a valid Address";
+      errors.emailx = "Email must be a valid Address";
     }
   }
 

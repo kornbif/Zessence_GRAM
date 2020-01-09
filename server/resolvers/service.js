@@ -14,9 +14,9 @@ module.exports = {
       }
     },
 
-    service: async (_, { id }) => {
+    service: async (_, { _id }) => {
       try {
-        const getService = await Service.findById(id);
+        const getService = await Service.findById(_id);
 
         if (getService) {
           return getService;
@@ -35,7 +35,7 @@ module.exports = {
         const newService = new Service({
           name: serviceInput.name,
           price: serviceInput.price,
-          duration: serviceInput.duration,
+          duration: serviceInput.duration, //MINUTES
           description: serviceInput.description,
           photo: serviceInput.photo,
           category: serviceInput.category
@@ -67,7 +67,7 @@ module.exports = {
 
     updateService: async (
       _,
-      { id, name, price, duration, description, photo, category },
+      { _id, name, price, duration, description, photo, category },
       context
     ) => {
       const admin = authAdmin(context);
@@ -92,7 +92,7 @@ module.exports = {
           updateService.category = category;
         }
 
-        const updated = await Service.findByIdAndUpdate(id);
+        const updated = await Service.findByIdAndUpdate(_id);
 
         return updated;
       } catch (err) {
@@ -100,11 +100,11 @@ module.exports = {
       }
     },
 
-    deleteService: async (_, { id }, context) => {
+    deleteService: async (_, { _id }, context) => {
       const admin = authAdmin(context);
       try {
-        await Employee.updateMany({}, { $pull: { services: id } });
-        await Category.updateMany({}, { $pull: { services: id } });
+        await Employee.updateMany({}, { $pull: { services: _id } });
+        await Category.updateMany({}, { $pull: { services: _id } });
         const deleted = await Service.findByIdAndDelete(id);
         return deleted;
       } catch (err) {

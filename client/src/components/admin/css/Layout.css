@@ -1,0 +1,22 @@
+.layout-container {
+  min-height: 100vh;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-areas:
+    "sidenav header header header"
+    "sidenav main main main"
+    "sidenav footer footer footer";
+  background-color: rgb(226, 217, 217);
+}
+
+.layout-main {
+  grid-area: main;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+
+  margin: 1.5rem auto;
+}
