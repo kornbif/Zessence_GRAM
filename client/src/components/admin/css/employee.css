@@ -1,0 +1,115 @@
+/* Ripple effect */
+.ripple {
+  background-position: center;
+  transition: background 0.8s;
+}
+.ripple:hover {
+  background: #47a7f5 radial-gradient(circle, transparent 1%, #47a7f5 1%)
+    center/15000%;
+}
+.ripple:active {
+  background-color: #6eb9f7;
+  background-size: 100%;
+  transition: background 0s;
+}
+
+/* Button style */
+button {
+  border: none;
+  border-radius: 2px;
+  padding: 12px 18px;
+  font-size: 16px;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: white;
+  background-color: #2196f3;
+  box-shadow: 0 0 4px #999;
+  outline: none;
+}
+
+.employee-container {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  width: 90%;
+  min-height: 80vh;
+}
+.employee-info {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  height: 40%;
+  background-color: white;
+  padding: 1rem;
+}
+.employee-image {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 40%;
+  height: 100%;
+}
+.employee-image img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  border-radius: 10%;
+}
+.employee-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 0 1rem;
+}
+.employee-details h3 {
+  text-align: center;
+}
+.employee-details_list {
+  width: 50%;
+  height: 100%;
+  list-style: none;
+  justify-self: flex-start;
+}
+.employee-details_list-item {
+  margin: 1rem 0;
+}
+.employee-details_list-item .label {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: capitalize;
+  letter-spacing: 1px;
+}
+.employee-details_list-item .info {
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: capitalize;
+  letter-spacing: 2px;
+}
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  width: 100%;
+  margin: 0 auto;
+}
+.employee-services {
+  width: 40%;
+  height: 100%;
+}
+.service-list {
+  min-height: 65%;
+}
+hr {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.employee-schedules {
+  background-color: white;
+  width: 100%;
+  padding: 1rem;
+}

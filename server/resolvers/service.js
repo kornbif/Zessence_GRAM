@@ -1,7 +1,7 @@
 const Service = require("../models/Service");
 const Category = require("../models/Category");
 const Employee = require("../models/Employee");
-const { authAdmin } = require("../util/check-auth");
+const Auth = require("../util/check-auth");
 const { UserInputError } = require("apollo-server");
 module.exports = {
   Query: {
@@ -31,7 +31,7 @@ module.exports = {
   Mutation: {
     createService: async (_, { serviceInput }, context) => {
       try {
-        const admin = authAdmin(context);
+        const admin = Auth(context);
         const newService = new Service({
           name: serviceInput.name,
           price: serviceInput.price,
@@ -70,7 +70,7 @@ module.exports = {
       { _id, name, price, duration, description, photo, category },
       context
     ) => {
-      const admin = authAdmin(context);
+      const admin = Auth(context);
       try {
         let updateService = {};
         if (name) {

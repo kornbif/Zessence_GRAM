@@ -197,15 +197,15 @@ const typeDefs = gql`
       photo: String
       role: String
     ): Employee
+    deleteEmployee(_id: ID!): String
     """
     Add Services to Employee
     """
     addService(employeeId: ID!, serviceId: ID!): Employee
     # SCHEDULE
-    addDate(id: ID!, date: String!): Employee
-    addTime(
-      _id: ID!
-      schedId: ID!
+    addSchedule(
+      employeeId: ID!
+      date: String!
       timeInput: TimeInput
       breakTimeInput: BreakTimeInput
     ): Employee

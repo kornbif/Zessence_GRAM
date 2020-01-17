@@ -1,40 +1,41 @@
-import React, { useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
-
 import { FETCH_EMPLOYEES_QUERY } from "../../util/graphql";
-import Layout from "../../components/admin/Layout";
-import EmployeeCard from "../../components/admin/EmployeeCard";
-import EmployeeAddForm from "../../components/admin/EmployeeAddForm";
 
-import { Grid, Header, Button, Icon, Modal } from "semantic-ui-react";
+import Layout from "../../components/admin/Layout";
+import EmployeeCard from "../../components/admin/employee/EmployeeCard";
+import NewEmployee from "../../components/admin/employee/NewEmployee";
+
+import { Grid, Header, Dimmer, Loader, Segment } from "semantic-ui-react";
+import "../../components/admin/css/header.css";
 
 function Employee() {
+  const [employees, setEmployees] = useState([]);
+
   const { loading, data } = useQuery(FETCH_EMPLOYEES_QUERY);
+
+  useEffect(() => {
+    if (data) {
+      setEmployees(data.employees);
+    }
+  }, [data]);
 
   return (
     <Layout>
       <div className="container-content">
-        <Header block size="huge">
-          Employees
-        </Header>
-        <Modal
-          trigger={
-            <Button size="large" floated="right">
-              <Icon name="add" />
-              Employee
-            </Button>
-          }
-          closeIcon
-        >
-          <Header icon="archive" content="Add new employee" />
-          <Modal.Content>
-            <EmployeeAddForm />
-          </Modal.Content>
-        </Modal>
-        <Grid columns={2}>
+        <Segment style={{ height: "18vh" }}>
+          <Header block size="huge">
+            Employees
+          </Header>
+          <NewEmployee />
+        </Segment>
+
+        <Grid columns={3} stackable>
           <Grid.Row>
             {loading ? (
-              <h1>Loading...</h1>
+              <Dimmer active inverted>
+                <Loader>Loading</Loader>
+              </Dimmer>
             ) : (
               data.employees &&
               data.employees.map(employee => (

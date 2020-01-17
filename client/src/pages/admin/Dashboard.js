@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { AuthContext } from "../../context/auth";
+import React from "react";
+
 import Layout from "../../components/admin/Layout";
 
 import { Card, Container } from "semantic-ui-react";

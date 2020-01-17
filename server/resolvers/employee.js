@@ -117,6 +117,17 @@ module.exports = {
         return updated;
       } catch (err) {}
     },
+    deleteEmployee: async (_, { _id }, context) => {
+      const admin = Auth(context);
+      try {
+        await Service.updateMany({}, { $pull: { employees: _id } });
+        const deleted = await Employee.findByIdAndDelete(_id);
+
+        return "Success";
+      } catch (err) {
+        throw err;
+      }
+    },
     addService: async (_, { employeeId, serviceId }, context) => {
       const admin = Auth(context);
       try {

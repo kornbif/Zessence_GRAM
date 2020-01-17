@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-export const FETCH_EMPLOYEES_QUERY = gql`
+const FETCH_EMPLOYEES_QUERY = gql`
   {
     employees {
       _id
@@ -14,3 +14,4 @@ export const FETCH_EMPLOYEES_QUERY = gql`
     }
   }
 `;
+export { FETCH_EMPLOYEES_QUERY };

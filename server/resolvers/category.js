@@ -1,5 +1,5 @@
 const Category = require("../models/Category");
-const { authAdmin } = require("../util/check-auth");
+const Auth = require("../util/check-auth");
 
 module.exports = {
   Query: {
@@ -26,7 +26,7 @@ module.exports = {
   },
   Mutation: {
     createCategory: async (_, { categoryInput }, context) => {
-      const admin = authAdmin(context);
+      const admin = Auth(context);
       try {
         const newCategory = new Category({
           name: categoryInput.name,
@@ -43,7 +43,7 @@ module.exports = {
     },
 
     updateCategory: async (_, { _id, name, description, photo }, context) => {
-      const admin = authAdmin(context);
+      const admin = Auth(context);
       try {
         let updateCateg = {};
 
@@ -68,7 +68,7 @@ module.exports = {
     },
 
     deleteCategory: async (_, { _id }, context) => {
-      const admin = authAdmin(context);
+      const admin = Auth(context);
       try {
         const deletedCategory = await Category.findByIdAndDelete(_id);
 

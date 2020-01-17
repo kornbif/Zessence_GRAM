@@ -103,8 +103,16 @@ module.exports = {
       try {
         const appointment = await Appointment.findById(_id);
 
-        // console.log(new Date(appointment.date).toDateString());
+        const appointEmployeeId = appointment.aesthetician;
         const appointDate = appointment.date;
+        const appointTime = appointment.time;
+        const appointDuration = appointment.duration;
+
+        const appointmentTimeSlots = timelineLabels(
+          appointTime,
+          appointDuration
+        );
+
         const checkdate = moment(appointDate, "MM-DD-YYYY").format(
           "MM-DD-YYYY"
         );
@@ -116,6 +124,16 @@ module.exports = {
             { _id },
             { $set: { status: "CANCELLED" } }
           );
+
+          await Employee.updateOne(
+            { _id: appointEmployeeId, "schedule.date": appointDate },
+            {
+              $addToSet: {
+                "schedule.$.start": { $each: appointmentTimeSlots }
+              }
+            }
+          );
+
           return appointment;
         } else {
           throw new Error(

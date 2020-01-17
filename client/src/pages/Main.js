@@ -5,15 +5,18 @@ import {
   Switch,
   Redirect
 } from "react-router-dom";
-
+import Navigation from "../components/main/Navigation";
 import Home from "./main/Home";
-
-function Main() {
+import Page404 from "./Page404";
+function Main({ match }) {
   return (
     <Router>
+      <Navigation />
       <Switch>
-        <Redirect from="/" to="/home" exact />
-        <Route path="/home" component={Home} />
+        <Route path={`${match.path}`} component={Home} exact />
+        <Route path={`${match.path}/home`} component={Home} />
+        <Route path={`${match.path}/about`} component={Home} exact />
+        <Route path="*" component={Page404} />
       </Switch>
     </Router>
   );

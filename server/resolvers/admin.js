@@ -3,6 +3,7 @@ const { UserInputError } = require("apollo-server");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Admin = require("../models/Admin");
+const Auth = require("../util/check-auth");
 
 const {
   validateAdminCreateInput,
@@ -61,11 +62,11 @@ module.exports = {
         { _id: admin.id, empId: admin.empId },
         process.env.SECRET_KEY,
         {
-          expiresIn: "1h"
+          expiresIn: "8h"
         }
       );
 
-      return { _id: admin.id, token: token, tokenExpiration: 1 };
+      return { _id: admin.id, token: token, tokenExpiration: 8 };
     },
 
     // CREATE NEW ADMIN
@@ -74,7 +75,7 @@ module.exports = {
       { adminInput: { empId, firstName, lastName, contact, email, password } },
       context
     ) => {
-      const admin = checkAuth(context);
+      const admin = Auth(context);
       try {
         //Validating Inputs
         const { valid, errors } = validateAdminCreateInput(
