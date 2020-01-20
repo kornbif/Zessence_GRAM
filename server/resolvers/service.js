@@ -37,7 +37,7 @@ module.exports = {
           price: serviceInput.price,
           duration: serviceInput.duration, //MINUTES
           description: serviceInput.description,
-          photo: serviceInput.photo,
+          // photo: serviceInput.photo,
           category: serviceInput.category
         });
 

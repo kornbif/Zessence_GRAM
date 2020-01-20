@@ -1,5 +1,7 @@
 const Category = require("../models/Category");
 const Auth = require("../util/check-auth");
+const { createWriteStream } = require("fs");
+const path = require("path");
 
 module.exports = {
   Query: {
@@ -30,8 +32,7 @@ module.exports = {
       try {
         const newCategory = new Category({
           name: categoryInput.name,
-          description: categoryInput.description,
-          photo: categoryInput.photo
+          description: categoryInput.description
         });
 
         const saved = await newCategory.save();
@@ -42,7 +43,7 @@ module.exports = {
       }
     },
 
-    updateCategory: async (_, { _id, name, description, photo }, context) => {
+    updateCategory: async (_, { _id, name, description }, context) => {
       const admin = Auth(context);
       try {
         let updateCateg = {};
@@ -52,9 +53,6 @@ module.exports = {
         }
         if (description) {
           updateCateg.description = description;
-        }
-        if (photo) {
-          updateCateg.photo = photo;
         }
 
         const updated = await Category.findByIdAndUpdate(_id, updateCateg, {
@@ -70,9 +68,28 @@ module.exports = {
     deleteCategory: async (_, { _id }, context) => {
       const admin = Auth(context);
       try {
-        const deletedCategory = await Category.findByIdAndDelete(_id);
+        await Category.findByIdAndDelete(_id);
 
-        return deletedCategory;
+        return "SUCCESS";
+      } catch (err) {
+        throw err;
+      }
+    },
+    uploadCategoryPhoto: async (_, { _id, file }) => {
+      try {
+        const category = await Category.findById(_id);
+        const { stream, filename, mimetype, encoding } = file;
+
+        console.log(stream);
+        // await new Promise(res =>
+        //   createReadStream()
+        //     .pipe(createWriteStream(path.join(__dirname, "../image", filename)))
+        //     .on("close", res)
+        // );
+
+        // await Category.updateOne({ _id }, { $set: { photo: filename } });
+
+        // return { filename };
       } catch (err) {
         throw err;
       }

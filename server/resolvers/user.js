@@ -71,7 +71,7 @@ module.exports = {
         const user = await User.findOne({ email });
 
         if (!user) {
-          errors.general = "Email not found";
+          errors.userX = "Email not found";
           throw new UserInputError("Email does not exist", { errors });
         }
 

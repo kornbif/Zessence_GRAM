@@ -28,7 +28,7 @@ const employeeSchema = new Schema(
     role: String,
     schedule: [
       {
-        date: String,
+        date: Date,
         start: [String],
         break: [String]
       }

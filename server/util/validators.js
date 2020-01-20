@@ -128,7 +128,7 @@ const validateUserLoginInput = (email, password) => {
   const errors = {};
 
   if (email.trim() === "") {
-    errors.empId = "Employee ID must not be empty";
+    errors.email = "Email must not be empty";
   }
 
   if (password.trim() === "") {

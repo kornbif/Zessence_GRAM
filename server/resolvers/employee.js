@@ -30,7 +30,7 @@ module.exports = {
   Mutation: {
     createEmployee: async (
       _,
-      { empInput: { empId, firstName, lastName, contact, email, photo, role } },
+      { empInput: { empId, firstName, lastName, contact, email, role } },
       context
     ) => {
       const admin = Auth(context);
@@ -62,7 +62,6 @@ module.exports = {
           lastName,
           contact,
           email,
-          photo,
           role
         });
 
@@ -75,7 +74,7 @@ module.exports = {
     },
     updateEmployee: async (
       _,
-      { _id, empId, firstName, lastName, contact, email, photo, role },
+      { _id, empId, firstName, lastName, contact, email, role },
       context
     ) => {
       const admin = Auth(context);
@@ -131,21 +130,6 @@ module.exports = {
     addService: async (_, { employeeId, serviceId }, context) => {
       const admin = Auth(context);
       try {
-        await Employee.updateOne(
-          { _id: employeeId },
-          { $addToSet: { services: serviceId } }
-        );
-
-        await Service.updateOne(
-          { _id: serviceId },
-          { $addToSet: { employees: employeeId } }
-        );
-
-        // employee.services.push(serviceId);
-        // service.employees.push(employeeId);
-        // await employee.save();
-        // await service.save();
-
         const employee = await Employee.findById(employeeId);
         const service = await Service.findById(serviceId);
         if (!employee) {
@@ -153,7 +137,35 @@ module.exports = {
         } else if (!service) {
           throw new Error("Service not found");
         } else {
+          await Employee.updateOne(
+            { _id: employeeId },
+            { $addToSet: { services: serviceId } }
+          );
+
+          await Service.updateOne(
+            { _id: serviceId },
+            { $addToSet: { employees: employeeId } }
+          );
+
+          return employee;
         }
+      } catch (err) {
+        throw err;
+      }
+    },
+    removeService: async (_, { employeeId, serviceId }, context) => {
+      const admin = Auth(context);
+      try {
+        const employee = await Employee.findById(employeeId);
+        await Employee.updateOne(
+          { _id: employeeId },
+          { $pull: { services: serviceId } }
+        );
+        await Service.updateOne(
+          { _id: serviceId },
+          { $pull: { employees: employeeId } }
+        );
+
         return employee;
       } catch (err) {
         throw err;

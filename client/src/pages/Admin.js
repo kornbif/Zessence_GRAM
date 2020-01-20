@@ -11,6 +11,7 @@ import Appointments from "./admin/Appointments";
 import Employees from "./admin/Employees";
 import Employee from "./admin/Employee";
 import Services from "./admin/Services";
+import Service from "./admin/Service";
 import Login from "./admin/Login";
 import PrivateRoute from "../util/PrivateRoute";
 import AuthRoute from "../util/AuthRoute";
@@ -34,6 +35,7 @@ function Admin() {
           component={Employee}
         />
         <PrivateRoute exact path="/zeadmin/services" component={Services} />
+        <PrivateRoute exact path="/zeadmin/service/:_id" component={Service} />
         <Route path="*" component={Page404} />
       </Switch>
     </Router>

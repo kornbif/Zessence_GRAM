@@ -1,4 +1,5 @@
 const Employee = require("../models/Employee");
+const Appointment = require("../models/Appointment");
 const { UserInputError } = require("apollo-server");
 const Auth = require("../util/check-auth");
 const { validateEmployeeCreateInput } = require("../util/validators");
@@ -34,8 +35,10 @@ module.exports = {
         date,
         timeInput: { startTime, timeLength },
         breakTimeInput: { startOfBreak, breakLength }
-      }
+      },
+      context
     ) => {
+      Auth(context);
       try {
         const initalTime = await timelineLabels(startTime, timeLength);
         const breakTime = await timelineLabels(startOfBreak, breakLength);
@@ -59,92 +62,87 @@ module.exports = {
           }
 
           await employee.schedule.push({
-            date: new Date(date).toLocaleDateString(),
+            date: new Date(date),
             start: finalTime,
             break: breakTime
           });
           await employee.save();
+
           return employee;
         }
       } catch (err) {
         throw err;
       }
+    },
+    deleteSchedule: async (_, { employeeId, scheduleId }, context) => {
+      Auth(context);
+      try {
+        const employee = Employee.findById(employeeId);
+        await Employee.updateOne(
+          { _id: employeeId },
+          {
+            $pullAll: { schedule: { _id: scheduleId } }
+          }
+        );
+        return employee;
+      } catch (err) {
+        throw err;
+      }
+    },
+    updateDate: async (_, { employeeId, scheduleId, date }, context) => {
+      Auth(context);
+      try {
+        await Employee.updateOne(
+          { _id: employeeId, "schedule._id": scheduleId },
+          {
+            $set: {
+              "schedule.$.date": new Date(date)
+            }
+          }
+        );
+        const employee = await Employee.findById(employeeId);
+        return employee;
+      } catch (err) {}
+    },
+    updateTime: async (
+      _,
+      {
+        employeeId,
+        scheduleId,
+        timeInput: { startTime, timeLength },
+        breakTimeInput: { startOfBreak, breakLength }
+      }
+    ) => {
+      Auth(context);
+      try {
+        const initalTime = await timelineLabels(startTime, timeLength);
+        const breakTime = await timelineLabels(startOfBreak, breakLength);
+        const finalTime = await initalTime.filter(item => {
+          return !breakTime.includes(item);
+        });
+        //WORKING TIME
+        await Employee.updateOne(
+          { _id: employeeId, "schedule._id": scheduleId },
+          {
+            $set: {
+              "schedule.$.start": finalTime
+            }
+          }
+        );
+        //BREAK
+        await Employee.updateOne(
+          { _id: employeeId, "schedule._id": scheduleId },
+          {
+            $set: {
+              "schedule.$.break": breakTime
+            }
+          }
+        );
+        const employee = await Employee.findById(employeeId);
+        return employee;
+      } catch (err) {
+        throw new Error("error");
+      }
     }
-    // addDate: async (_, { employeeId, date }, context) => {
-    //   const admin = Auth(context);
-    //   try {
-    //     const employee = await Employee.findById(employeeId);
-
-    //     if (employee) {
-    //       const dateExist = await Employee.findOne({
-    //         _id: employeeId,
-    //         schedule: { $elemMatch: { date: date } }
-    //       });
-
-    //       if (dateExist) {
-    //         throw new UserInputError("Date already exist", {
-    //           dateError: "Date exist"
-    //         });
-    //       }
-
-    //       await employee.schedule.push({
-    //         date: new Date(date).toLocaleDateString()
-    //       });
-    //       await employee.save();
-    //       return employee;
-    //     } else throw new Error("Employee not found");
-    //   } catch (err) {
-    //     throw err;
-    //   }
-    // },
-    // addTime: async (
-    //   _,
-    //   {
-    //     employeeId,
-    //     schedId,
-    //     timeInput: { startTime, timeLength },
-    //     breakTimeInput: { startOfBreak, breakLength }
-    //   },
-    //   context
-    // ) => {
-    //   const admin = Auth(context);
-    //   try {
-    //     const initalTime = await timelineLabels(startTime, timeLength);
-    //     const breakTime = await timelineLabels(startOfBreak, breakLength);
-
-    //     const finalTime = await initalTime.filter(item => {
-    //       return !breakTime.includes(item);
-    //     });
-    //     //WORKING TIME
-    //     await Employee.updateOne(
-    //       { _id: employeeId, "schedule._id": schedId },
-    //       {
-    //         $set: {
-    //           "schedule.$.start": finalTime
-    //         }
-    //       }
-    //     );
-    //     //BREAK
-    //     await Employee.updateOne(
-    //       { _id: employeeId, "schedule._id": schedId },
-    //       {
-    //         $set: {
-    //           "schedule.$.break": breakTime
-    //         }
-    //       }
-    //     );
-    //     const employee = await Employee.findById(employeeId);
-    //     return employee;
-
-    //     // // Using push can cause duplication
-    //     // const schedIndex = employee.schedule.findIndex(
-    //     //   sched => sched.id === schedId
-    //     // );
-    //     // await employee.schedule[schedIndex].start.push("9:30 AM");
-    //     // employee.save();
-    //   } catch (err) {
-    //     throw err;
-    //   }
-    // }
   }
 };

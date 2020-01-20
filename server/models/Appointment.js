@@ -24,7 +24,7 @@ const appointmentSchema = new Schema(
       autopopulate: true
     },
     date: {
-      type: String,
+      type: Date,
       required: true
     },
     time: {

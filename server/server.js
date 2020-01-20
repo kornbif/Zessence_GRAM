@@ -1,4 +1,4 @@
-const { ApolloServer } = require("apollo-server");
+const { ApolloServer, makeExecutableSchema } = require("apollo-server");
 const mongoose = require("mongoose");
 const typeDefs = require("./schema");
 const resolvers = require("./resolvers");
@@ -23,10 +23,11 @@ connection.once("open", () => {
   console.log("MongoDB database connection established successfully");
 });
 
+const schema = makeExecutableSchema({ typeDefs, resolvers });
+
 const server = new ApolloServer({
   cors: true,
-  typeDefs,
-  resolvers,
+  schema,
   context: ({ req }) => ({ req })
 });
 

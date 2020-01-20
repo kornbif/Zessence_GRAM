@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
-import DayPicker from "react-day-picker";
-import moment from "moment";
-import "react-day-picker/lib/style.css";
 import Layout from "../../components/admin/Layout";
 import DeleteButton from "../../components/admin/employee/DeleteButton";
+import NewSchedule from "../../components/admin/employee/NewSchedule";
 import ScheduleEmployeeCard from "../../components/admin/employee/ScheduleEmployeeCard";
 import UpdateEmployee from "../../components/admin/employee/UpdateEmployee";
 
@@ -68,7 +66,13 @@ function Employee(props) {
         <Grid celled stackable>
           <Grid.Row>
             <Grid.Column width={3}>
-              <Image src="https://images.pexels.com/photos/2613260/pexels-photo-2613260.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" />
+              <Image
+                src={
+                  photo
+                    ? `${photo}`
+                    : "https://images.pexels.com/photos/2613260/pexels-photo-2613260.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                }
+              />
             </Grid.Column>
             <Grid.Column width={6}>
               <Header as="h2" block textAlign="center">
@@ -99,14 +103,17 @@ function Employee(props) {
                   <Label horizontal>Email</Label>
                   {email}
                 </List.Item>
+                <UpdateEmployee employee={data.employee} />
+                <NewSchedule employee={data.employee} />
               </List>
               <hr />
-              <UpdateEmployee employee={data.employee} />
+
               <DeleteButton
                 employee={data.employee}
                 callback={deleteEmployeeCallback}
               />
             </Grid.Column>
+
             <Grid.Column width={7}>
               <Header as="h2" block textAlign="center">
                 Service
@@ -136,6 +143,10 @@ function Employee(props) {
               </Button>
             </Grid.Column>
           </Grid.Row>
+          <Header as="h3" block>
+            Schedule
+          </Header>
+
           <Grid.Row columns={4}>
             {loading ? (
               <Dimmer>

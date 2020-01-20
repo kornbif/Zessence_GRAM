@@ -1,6 +1,7 @@
 const { gql } = require("apollo-server");
 
 const typeDefs = gql`
+  scalar Upload
   # adminAuth
   type AuthData {
     _id: ID!
@@ -74,7 +75,7 @@ const typeDefs = gql`
     _id: ID!
     name: String!
     description: String
-    photo: String!
+    photo: String
     services: [Service!] #list of services
   }
 
@@ -89,11 +90,11 @@ const typeDefs = gql`
     employees: [Employee]!
   }
 
-  # enum Role {
-  #   RECEPTIONIST
-  #   AESTHETICIAN
-  # }
-
+  type File {
+    filename: String!
+    mimetype: String!
+    encoding: String!
+  }
   # Inputs
 
   input UserInput {
@@ -128,7 +129,6 @@ const typeDefs = gql`
     lastName: String!
     contact: String
     email: String!
-    photo: String
     role: String
   }
 
@@ -145,7 +145,6 @@ const typeDefs = gql`
   input CategoryInput {
     name: String!
     description: String
-    photo: String
   }
 
   input ServiceInput {
@@ -153,7 +152,7 @@ const typeDefs = gql`
     price: Float!
     duration: Int!
     description: String
-    photo: String
+    # photo: Upload
     category: ID!
   }
 
@@ -183,9 +182,6 @@ const typeDefs = gql`
     createAdmin(adminInput: AdminInput): Admin
     adminLogin(empId: String!, password: String!): AuthData
     # Employee
-    """
-    Not yet include the deleteEmployee Mutation
-    """
     createEmployee(empInput: EmployeeInput): Employee
     updateEmployee(
       _id: ID!
@@ -194,18 +190,28 @@ const typeDefs = gql`
       lastName: String
       contact: String
       email: String
-      photo: String
       role: String
     ): Employee
     deleteEmployee(_id: ID!): String
     """
-    Add Services to Employee
+    Services to Employee
     """
     addService(employeeId: ID!, serviceId: ID!): Employee
+    removeService(employeeId: ID!, serviceId: ID!): Employee
     # SCHEDULE
     addSchedule(
       employeeId: ID!
       date: String!
+      timeInput: TimeInput
+      breakTimeInput: BreakTimeInput
+    ): Employee
+    deleteSchedule(employeeId: ID!, scheduleId: ID!): Employee
+
+    updateDate(employeeId: ID!, scheduleId: ID!, date: String!): Employee
+
+    updateTime(
+      employeeId: ID!
+      scheduleId: ID!
       timeInput: TimeInput
       breakTimeInput: BreakTimeInput
     ): Employee
@@ -218,7 +224,8 @@ const typeDefs = gql`
       description: String
       photo: String
     ): Category
-    deleteCategory(_id: ID!): String!
+    deleteCategory(_id: ID!): String
+    uploadCategoryPhoto(_id: ID!, file: Upload!): File
 
     #Service
     createService(serviceInput: ServiceInput): Service

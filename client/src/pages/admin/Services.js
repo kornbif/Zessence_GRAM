@@ -1,44 +1,52 @@
-import React from "react";
-import gql from "graphql-tag";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import Layout from "../../components/admin/Layout";
 
-import { Grid, Card, Image, Icon, Button } from "semantic-ui-react";
+import Layout from "../../components/admin/Layout";
+import { FETCH_CATEGORIES_QUERY } from "../../util/graphql";
+import CategoryCard from "../../components/admin/service/CategoryCard";
+import NewCategory from "../../components/admin/service/NewCategory";
+
+import "../../components/admin/css/header.css";
+import { Grid, Header, Container, Dimmer, Loader } from "semantic-ui-react";
 
 const Services = () => {
+  const [categories, setCategories] = useState([]);
+
+  const { loading, data } = useQuery(FETCH_CATEGORIES_QUERY);
+
+  useEffect(() => {
+    if (data) {
+      setCategories(data.categories);
+    }
+  }, [data]);
+
   return (
     <Layout>
-      <Grid columns={3} stackable>
-        <Grid.Row>
-          <Grid.Column>
-            <Card>
-              <Image
-                src="https://www.sanctuarysalondayspa.com/wp-content/uploads/2019/08/customized-facial.jpg"
-                wrapped
-                ui={false}
-              />
-              <Card.Content>
-                <Card.Header>Facial Treatment</Card.Header>
-                <Card.Description>
-                  Daniel is a comedian living in Nashville.
-                </Card.Description>
-              </Card.Content>
-              <Card.Content extra>
-                <Button basic color="green">
-                  <Icon name="eye" />
-                  Services
-                </Button>
-              </Card.Content>
-            </Card>
-          </Grid.Column>
-          <Grid.Column>
-            <Card>FACIAL</Card>
-          </Grid.Column>
-          <Grid.Column>
-            <Card>FACIAL</Card>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+      <div className="container-content">
+        <Grid columns={3} stackable>
+          <Container>
+            <Header block as="h1">
+              Service
+            </Header>
+            <NewCategory />
+          </Container>
+
+          <Grid.Row>
+            {loading ? (
+              <Dimmer>
+                <Loader>Loading</Loader>
+              </Dimmer>
+            ) : (
+              data.categories &&
+              data.categories.map(category => (
+                <Grid.Column key={category._id}>
+                  <CategoryCard category={category} />
+                </Grid.Column>
+              ))
+            )}
+          </Grid.Row>
+        </Grid>
+      </div>
     </Layout>
   );
 };

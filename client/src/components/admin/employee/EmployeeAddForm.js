@@ -18,8 +18,6 @@ function EmployeeAddForm({ setOpen }) {
     role: "AESTHETICIAN"
   });
 
-
-
   const [createEmployee, { loading }] = useMutation(CREATE_EMPLOYEE_MUTATION, {
     variables: values,
     update(cache, result) {
@@ -152,7 +150,7 @@ function EmployeeAddForm({ setOpen }) {
           </select>
         </div>
       </Form.Group>
-      <Button type="submit">Update</Button>
+      <Button type="submit">Add</Button>
     </Form>
   );
 }

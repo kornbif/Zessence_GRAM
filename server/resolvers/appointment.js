@@ -48,9 +48,10 @@ module.exports = {
 
         const checkAppointment = await Appointment.findOne({
           user,
-          date,
+          date: new Date(date),
           status: { $ne: "CANCELLED" }
         });
+
         const errors = {};
         if (checkAppointment) {
           errors.general = "You already set an appointment";
@@ -68,7 +69,7 @@ module.exports = {
             user,
             service,
             aesthetician: employee,
-            date,
+            date: new Date(date),
             time,
             duration,
             message,
