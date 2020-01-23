@@ -13,15 +13,15 @@ import Employee from "./admin/Employee";
 import Services from "./admin/Services";
 import Service from "./admin/Service";
 import Login from "./admin/Login";
-import PrivateRoute from "../util/PrivateRoute";
-import AuthRoute from "../util/AuthRoute";
+import {PrivateRoute} from "../util/PrivateRoute";
+import { AdminAuthRoute } from "../util/AuthRoute";
 import Page404 from "./Page404";
 function Admin() {
   return (
     <Router>
       <Switch>
         <Redirect from="/zeadmin" to="/zeadmin/login" exact />
-        <AuthRoute path="/zeadmin/login" component={Login} exact />
+        <AdminAuthRoute path="/zeadmin/login" component={Login} exact />
         <PrivateRoute exact path="/zeadmin/dashboard" component={Dashboard} />
         <PrivateRoute
           exact

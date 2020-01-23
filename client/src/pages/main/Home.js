@@ -1,10 +1,12 @@
 import React from "react";
+import { StyledContainer } from "../../components/main/StyledContainer.styled";
+import { RegisterCenter } from "../../components/main/Register/Register.styled";
 
 function Home() {
   return (
-    <div style={{ background: "#ccc", height: "100vh"}}>
-      <h1>HOME</h1>
-    </div>
+    <StyledContainer>
+      <RegisterCenter></RegisterCenter>
+    </StyledContainer>
   );
 }
 

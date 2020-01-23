@@ -8,6 +8,11 @@ const typeDefs = gql`
     token: String!
     tokenExpiration: Int!
   }
+  type UserAuthData {
+    _id: ID!
+    token: String!
+    tokenExpiration: Int!
+  }
 
   type User {
     _id: ID!
@@ -25,7 +30,7 @@ const typeDefs = gql`
     _id: ID!
     user: User
     service: Service
-    aesthetician: Employee
+    employee: Employee
     date: String!
     time: String!
     duration: Int
@@ -172,7 +177,7 @@ const typeDefs = gql`
   type Mutation {
     # User
     register(userInput: UserInput): User
-    userLogin(email: String!, password: String!): AuthData
+    userLogin(email: String!, password: String!): UserAuthData
 
     #Appointment
     createAppointment(inputAppointment: AppointmentInput): Appointment
@@ -196,7 +201,7 @@ const typeDefs = gql`
     """
     Services to Employee
     """
-    addService(employeeId: ID!, serviceId: ID!): Employee
+    addService(employeeId: ID!, serviceId: ID!): Service
     removeService(employeeId: ID!, serviceId: ID!): Employee
     # SCHEDULE
     addSchedule(

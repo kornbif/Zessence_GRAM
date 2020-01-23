@@ -7,7 +7,11 @@ import { Link } from "react-router-dom";
 
 import { Form, Button, Icon } from "semantic-ui-react";
 
-import "../../components/main/css/userAuth.css";
+import { StyledContainer } from "../../components/main/StyledContainer.styled";
+import {
+  LoginLeft,
+  LoginRight
+} from "../../components/main/Login/Login.styled";
 
 const Login = props => {
   const context = useContext(AuthContext);
@@ -38,9 +42,9 @@ const Login = props => {
   }
 
   return (
-    <div className="user-login_container">
-      <div className="user-login_left"></div>
-      <div className="user-login_right">
+    <StyledContainer>
+      <LoginLeft />
+      <LoginRight>
         <div className="form-container">
           <Form
             onSubmit={onSubmit}
@@ -108,8 +112,8 @@ const Login = props => {
             </Link>
           </Form>
         </div>
-      </div>
-    </div>
+      </LoginRight>
+    </StyledContainer>
   );
 };
 

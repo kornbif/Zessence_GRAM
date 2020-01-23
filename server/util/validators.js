@@ -89,6 +89,7 @@ const validateUserCreateInput = (
   firstName,
   lastName,
   email,
+  contact,
   password,
   confirmPassword
 ) => {
@@ -107,17 +108,21 @@ const validateUserCreateInput = (
   } else {
     const regex = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$/;
     if (!email.match(regex)) {
-      errors.email = "Email must be a valid Address";
+      errors.emailX = "Email must be a valid Address";
     }
+  }
+  if (contact.trim() === "") {
+    errors.contact = "Last name must not be empty";
   }
 
   if (password === "" || confirmPassword === "") {
     errors.password = "Password must not be empty";
-  } else {
-    if (password !== confirmPassword) {
-      errors.confirmPassword = "Password do not match";
-    }
   }
+
+  if (password !== confirmPassword) {
+    errors.confirmPassword = "Password do not match";
+  }
+
   return {
     errors,
     valid: Object.keys(errors).length < 1

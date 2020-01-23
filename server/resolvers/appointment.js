@@ -2,7 +2,7 @@ const Appointment = require("../models/Appointment");
 const User = require("../models/User");
 const Service = require("../models/Service");
 const Employee = require("../models/Employee");
-const Auth = require("../util/check-auth");
+const UserAuth = require("../util/userCheckAuth");
 const { UserInputError } = require("apollo-server");
 const moment = require("moment");
 
@@ -40,7 +40,7 @@ module.exports = {
       context
     ) => {
       try {
-        const { _id } = Auth(context);
+        const { _id } = UserAuth(context);
 
         const user = await User.findById(_id);
         const service = await Service.findById(serviceId);
@@ -100,7 +100,7 @@ module.exports = {
       }
     },
     cancelAppointment: async (_, { _id }, context) => {
-      const user = Auth(context);
+      const user = UserAuth(context);
       try {
         const appointment = await Appointment.findById(_id);
 

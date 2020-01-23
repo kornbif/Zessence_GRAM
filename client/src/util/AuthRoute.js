@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { AuthContext } from "../context/auth";
 
-function AuthRoute({ component: Component, ...rest }) {
+export const AdminAuthRoute = ({ component: Component, ...rest }) => {
   const { user } = useContext(AuthContext);
 
   return (
@@ -13,6 +13,17 @@ function AuthRoute({ component: Component, ...rest }) {
       }
     />
   );
-}
+};
 
-export default AuthRoute;
+export const UserAuthRoute = ({ component: Component, ...rest }) => {
+  const { user } = useContext(AuthContext);
+
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        user ? <Redirect to="/zessence" /> : <Component {...props} />
+      }
+    />
+  );
+};

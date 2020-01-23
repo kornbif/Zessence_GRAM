@@ -1,10 +1,16 @@
 import React from "react";
+import { StyledContainer } from "../../components/main/StyledContainer.styled";
+import {
+  LoginLeft,
+  LoginRight
+} from "../../components/main/Login/Login.styled";
 
 const About = () => {
   return (
-    <div>
-      <h1>ABOUT</h1>
-    </div>
+    <StyledContainer>
+      <LoginLeft />
+      <LoginRight></LoginRight>
+    </StyledContainer>
   );
 };
 

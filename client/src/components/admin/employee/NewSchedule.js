@@ -3,7 +3,6 @@ import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 import { useForm } from "../../../util/hooks";
 
-
 import { Button, Form, Modal, Icon, Header } from "semantic-ui-react";
 
 const NewSchedule = ({ employee: { _id } }) => {

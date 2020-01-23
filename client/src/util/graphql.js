@@ -39,4 +39,33 @@ const FETCH_SERVICES_QUERY = gql`
   }
 `;
 
-export { FETCH_EMPLOYEES_QUERY, FETCH_CATEGORIES_QUERY, FETCH_SERVICES_QUERY };
+const FETCH_APPOINTMENTS_QUERY = gql`
+  {
+    appointments {
+      _id
+      user {
+        _id
+        firstName
+      }
+      service {
+        _id
+        name
+      }
+      aesthetician {
+        _id
+        firstName
+        lastName
+      }
+      date
+      time
+      message
+    }
+  }
+`;
+
+export {
+  FETCH_EMPLOYEES_QUERY,
+  FETCH_CATEGORIES_QUERY,
+  FETCH_SERVICES_QUERY,
+  FETCH_APPOINTMENTS_QUERY
+};

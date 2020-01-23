@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { AuthContext } from "../context/auth";
 import { Route, Redirect } from "react-router-dom";
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
+export const PrivateRoute = ({ component: Component, ...rest }) => {
   const { user } = useContext(AuthContext);
   return (
     <Route
@@ -20,4 +20,23 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   );
 };
 
-export default PrivateRoute;
+export const UserPrivateRoute = ({ component: Component, ...rest }) => {
+  const { user } = useContext(AuthContext);
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        user ? (
+          <Component {...props} />
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/zessence/login",
+              state: { from: props.location }
+            }}
+          />
+        )
+      }
+    />
+  );
+};

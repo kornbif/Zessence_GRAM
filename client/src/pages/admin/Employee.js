@@ -6,6 +6,7 @@ import DeleteButton from "../../components/admin/employee/DeleteButton";
 import NewSchedule from "../../components/admin/employee/NewSchedule";
 import ScheduleEmployeeCard from "../../components/admin/employee/ScheduleEmployeeCard";
 import UpdateEmployee from "../../components/admin/employee/UpdateEmployee";
+import EmployeeServiceAddForm from "../../components/admin/employee/EmployeeServiceAddForm";
 
 import {
   Dimmer,
@@ -137,10 +138,7 @@ function Employee(props) {
                 </List>
               </Container>
               <hr />
-              <Button color="twitter" floated="right">
-                <Icon name="add" />
-                Add service
-              </Button>
+              <EmployeeServiceAddForm employeeId={employee._id} />
             </Grid.Column>
           </Grid.Row>
           <Header as="h3" block>

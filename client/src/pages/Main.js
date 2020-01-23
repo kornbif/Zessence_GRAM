@@ -7,6 +7,8 @@ import MyAccount from "./main/MyAccount";
 import Register from "./main/Register";
 import Login from "./main/Login";
 import Appointment from "./main/Appointment";
+import { UserAuthRoute } from "../util/AuthRoute";
+import { UserPrivateRoute } from "../util/PrivateRoute";
 import Page404 from "./Page404";
 function Main({ match }) {
   return (
@@ -16,9 +18,17 @@ function Main({ match }) {
         <Route path={`${match.path}`} component={Home} exact />
         <Route path={`${match.path}/home`} component={Home} />
         <Route path={`${match.path}/about`} component={About} exact />
-        <Route path={`${match.path}/register`} component={Register} exact />
-        <Route path={`${match.path}/login`} component={Login} exact />
-        <Route path={`${match.path}/myaccount`} component={MyAccount} exact />
+        <UserAuthRoute
+          path={`${match.path}/register`}
+          component={Register}
+          exact
+        />
+        <UserAuthRoute path={`${match.path}/login`} component={Login} exact />
+        <UserPrivateRoute
+          path={`${match.path}/myaccount`}
+          component={MyAccount}
+          exact
+        />
         <Route
           path={`${match.path}/appointment`}
           component={Appointment}

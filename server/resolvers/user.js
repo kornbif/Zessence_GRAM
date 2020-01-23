@@ -1,5 +1,5 @@
 require("dotenv").config({ path: "../env" });
-const { UserInputError, ForbiddenError } = require("apollo-server");
+const { UserInputError } = require("apollo-server");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
@@ -30,6 +30,7 @@ module.exports = {
         firstName,
         lastName,
         email,
+        contact,
         password,
         confirmPassword
       );
@@ -41,11 +42,8 @@ module.exports = {
       const existingUser = await User.findOne({ email });
 
       if (existingUser) {
-        throw new UserInputError("Error", {
-          erros: {
-            email: "This email already taken"
-          }
-        });
+        errors.userTaken = "This email already taken";
+        throw new UserInputError("Error", { errors });
       }
 
       const hashedPassword = await bcrypt.hash(password, 12);
@@ -88,7 +86,7 @@ module.exports = {
         const token = await jwt.sign(
           { _id: user.id, email: user.email },
 
-          process.env.SECRET_KEY,
+          process.env.SIKRETONG_SUSI,
           {
             expiresIn: "1h"
           }

@@ -16,7 +16,7 @@ const ScheduleEmployeeCard = ({ sched: { id, date, start } }) => {
         <Card.Description>
           {start.map((time, index) => (
             <List horizontal selection>
-              <List.Item key={`${id}+${index}`}>
+              <List.Item key={`${id}${time}`}>
                 <Label size="mini">{time}</Label>
               </List.Item>
             </List>

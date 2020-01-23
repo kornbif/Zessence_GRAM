@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
+
+import AppointmentForm from "../../components/main/Appointment/AppointmentForm";
+import { StyledContainer } from "../../components/main/StyledContainer.styled";
 
 const Appointment = () => {
   return (
-    <div>
-      <h1>Appointment</h1>
-    </div>
+    <StyledContainer>
+      <AppointmentForm />
+    </StyledContainer>
   );
 };
 
